@@ -23,7 +23,6 @@ function AdminDashboard() {
   const fetchBookings = async () => {
     try {
       const res = await getAllBookingsForAdmin();
-      console.log('All Bookings:', res.data);
       setBookings(res.data.message || []);
       setLoading(false);
     } catch (err) {

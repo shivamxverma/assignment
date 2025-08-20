@@ -16,7 +16,6 @@ function PatientDashboard() {
 
   useEffect(() => {
     if (user) {
-      console.log('User:', user);
       fetchSlots();
       fetchBookings();
     }
@@ -25,7 +24,6 @@ function PatientDashboard() {
   const fetchSlots = async () => {
     try {
       const res = await getAvailableSlots();
-      console.log('Available Slots:', res.data);
       setSlots(res.data.message);
       setLoading(false);
     } catch (err) {

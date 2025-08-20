@@ -19,7 +19,6 @@ function Login() {
 
       localStorage.setItem('accessToken', token);
       updateUser(token);
-      console.log('Role:', role);
 
       if (role === 'admin') {
         console.log('Admin role detected, navigating to admin dashboard');
