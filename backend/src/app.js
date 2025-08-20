@@ -24,6 +24,6 @@ app.use(express.static('public'));
 
 import userRoutes from './routes/user.route.js';
 
-app.use("/api/", userRoutes);
+app.use("/api", userRoutes);
 
 export default app;

@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  role : {
+  role: {
     type: String,
     enum: ['patient', 'admin'],
     default: 'patient',
@@ -23,15 +23,15 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Booking',
   }],
-  refreshToken : {
+  refreshToken: {
     type: String,
     default: null,
   },
-  slots : [{
+  slots: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Slot',
   }]
-},{timestamps: true});
+}, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
 
