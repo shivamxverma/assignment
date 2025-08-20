@@ -1,24 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useAuth } from '../auth/AuthContext';
-import { getBookingsForUser , createBooking,getAvailableSlots } from '../api/api';
+import { getBookingsForUser, createBooking, getAvailableSlots } from '../api/api';
 
 function PatientDashboard() {
-  const [slots, setSlots] = useState([
-    { id: '', start: '', end: '' }
-  ]);
-  const [bookings, setBookings] = useState([
-    { id: '', start: '', end: '' }
-  ]);
+  const [slots, setSlots] = useState([]);
+  const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const { user } = useAuth();
+  const { user } = useAuth(); 
 
   useEffect(() => {
-    if (user) {
-      fetchSlots();
-      fetchBookings();
-    }
+    fetchSlots();
+    fetchBookings();
   }, [user]);
 
   const fetchSlots = async () => {
@@ -51,26 +44,39 @@ function PatientDashboard() {
     }
   };
 
+  if (loading) {
+    return <div>Loading data...</div>;
+  }
+
   return (
     <div style={{ padding: '20px' }}>
       <h2>Patient Dashboard</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <h3>Available Slots (Next 7 Days, UTC)</h3>
-      {loading ? <p>Loading...</p> : (
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
         <ul>
-          {slots.map(slot => (
-            <li key={slot.id}>
-              {slot.start} - {slot.end} <button onClick={() => handleBook(slot.id)}>Book</button>
-            </li>
-          ))}
+          {slots.length === 0 ? (
+            <p>No available slots</p>
+          ) : (
+            slots.map((slot) => (
+              <li key={slot.id}>
+                {slot.start} - {slot.end}{' '}
+                <button onClick={() => handleBook(slot.id)}>Book</button>
+              </li>
+            ))
+          )}
         </ul>
       )}
       <h3>My Bookings</h3>
       <ul>
-        {bookings.map(b => (
-          <li key={b.id}>{b.start} - {b.end}</li>
+        {bookings.map((b) => (
+          <li key={b.id}>
+            {b.start} - {b.end}
+          </li>
         ))}
-      </ul> 
+      </ul>
     </div>
   );
 }

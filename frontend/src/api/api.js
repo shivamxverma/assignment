@@ -1,26 +1,6 @@
 import axios from "axios";
 const BASE = "https://assignment-h9fg.onrender.com/api";
-const accessToken = localStorage.getItem("accessToken");
 
-const api = axios.create({
-  baseURL: BASE,
-  headers: {
-    Authorization: `Bearer ${accessToken}`,
-    "Content-Type": "application/json",
-  },
-  withCredentials: true,
-});
-
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response.status === 401) {
-      localStorage.removeItem("accessToken");
-      window.location.href = "/login"; 
-    }
-    return Promise.reject(error);
-  }
-);
 
 export const login = (email,password) => {
     return axios.post(`${BASE}/login`,
@@ -43,20 +23,30 @@ export const register = (name, email, password, role) => {
 }
 
 export const getAllBookingsForAdmin = () => {
-    return api.get(`${BASE}/all-bookings`);
+    return axios.get(`${BASE}/all-bookings`,{
+        withCredentials: true,
+        headers: { Authorization : `Bearer ${localStorage.getItem('accessToken')}` }
+    });
 }
 
 export const getBookingsForUser = () => {
-    return api.get(`${BASE}/my-bookings`);
+    return axios.get(`${BASE}/my-bookings`,{
+        withCredentials: true,
+        headers: { Authorization : `Bearer ${localStorage.getItem('accessToken')}` }
+    });
 }
 
 export const createBooking = (bookId) => {
-    return api.post(`${BASE}/book/${bookId}`);
+    return axios.post(`${BASE}/book/${bookId}`,{
+      withCredentials: true,
+      headers : { Authorization : `Bearer ${localStorage.getItem('accessToken')}` }
+    });
 }
 
 export const getAvailableSlots = () => {
-    return api.get(`${BASE}/slots`);
+    return axios.get(`${BASE}/slots`,{
+      withCredentials: true,
+      headers: { Authorization : `Bearer ${localStorage.getItem('accessToken')}` }
+    });
 }
-
-export default api;
 

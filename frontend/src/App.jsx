@@ -7,11 +7,7 @@ import PatientDashboard from './pages/PatientDashboard.jsx';
 import NavBar from './components/Navbar.jsx';
 import { AuthProvider } from './auth/AuthContext';
 import RequireRole from './auth/RequireRole';
-
-function ProtectedRoute({ children }) {
-  const token = localStorage.getItem('accessToken');
-  return token ? <>{children}</> : <Navigate to="/login" replace />;
-}
+import ProtectedRoute from './auth/ProtectedRoute.jsx';
 
 export default function App() {
   return (
@@ -43,7 +39,7 @@ export default function App() {
               }
             />
             <Route path="/" element={<Navigate to="/login" replace />} />
-            <Route path="*" element={<Navigate to="/login" replace />} />
+            {/* <Route path="*" element={<Navigate to="/login" replace />} /> */}
           </Routes>
         </div>
       </BrowserRouter>
