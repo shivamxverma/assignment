@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE = "http://localhost:8000/api";
+const BASE = "https://assignment-h9fg.onrender.com/api";
 const accessToken = localStorage.getItem("accessToken");
 
 const api = axios.create({
