@@ -4,7 +4,7 @@ import Login from './pages/Login.jsx';
 import SignUp from './pages/Register.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import PatientDashboard from './pages/PatientDashboard.jsx';
-import NavBar from './components/NavBar.jsx';
+import NavBar from './components/Navbar.jsx';
 import { AuthProvider } from './auth/AuthContext';
 import RequireRole from './auth/RequireRole';
 

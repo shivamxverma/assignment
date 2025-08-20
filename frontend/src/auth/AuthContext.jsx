@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
 const AuthCtx = createContext();
@@ -6,18 +6,26 @@ const AuthCtx = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if (!token) return setUser(null);
+  const updateUser = (token) => {
+    if (!token) {
+      setUser(null);
+      return;
+    }
     try {
       const payload = jwtDecode(token);
+      console.log('Decoded JWT:', payload); 
       setUser({ id: payload._id, role: payload.role });
     } catch {
       setUser(null);
     }
-  }, []);
+  };
 
-  return <AuthCtx.Provider value={{ user }}>{children}</AuthCtx.Provider>;
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    updateUser(token);
+  }, []); 
+
+  return <AuthCtx.Provider value={{ user, updateUser }}>{children}</AuthCtx.Provider>;
 }
 
 export const useAuth = () => useContext(AuthCtx);

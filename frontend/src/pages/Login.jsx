@@ -1,25 +1,37 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import {login} from '../api/api';
+import { login } from '../api/api';
+import { useAuth } from '../auth/AuthContext';
 
 function Login() {
+  const navigate = useNavigate();
+  const { updateUser } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const res = await login(email, password);
-      const role = res.data.message;
-      const token = res.data.message.token;
-      
+      const { role, token } = res.data.message;
+
       localStorage.setItem('accessToken', token);
-      
-      navigate( role === 'admin' ? '/admin' : '/patient');
+      updateUser(token);
+      console.log('Role:', role);
+
+      if (role === 'admin') {
+        console.log('Admin role detected, navigating to admin dashboard');
+        navigate('/admin', { replace: true });
+      } else if (role === 'patient') {
+        console.log('Patient role detected, navigating to patient dashboard');
+        navigate('/patient', { replace: true });
+      } else {
+        throw new Error('Invalid role');
+      }
     } catch (err) {
+      console.error('Login error:', err);
       setError(err.response?.data?.error?.message || 'Login failed');
     }
   };
@@ -34,7 +46,7 @@ function Login() {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             required
             style={{ width: '100%', padding: '8px' }}
           />
@@ -44,7 +56,7 @@ function Login() {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             required
             style={{ width: '100%', padding: '8px' }}
           />

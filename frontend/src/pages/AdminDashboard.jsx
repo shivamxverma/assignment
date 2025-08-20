@@ -23,7 +23,8 @@ function AdminDashboard() {
   const fetchBookings = async () => {
     try {
       const res = await getAllBookingsForAdmin();
-      setBookings(res.data.data);
+      console.log('All Bookings:', res.data);
+      setBookings(res.data.message || []);
       setLoading(false);
     } catch (err) {
       setError(err.response?.data?.error?.message || 'Error fetching bookings');
