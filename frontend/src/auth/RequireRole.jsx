@@ -1,12 +1,12 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
-export default function RequireRole({ allowed, children }) {
+function RequireRole({ allowed, children }) {
   const { user, loading } = useAuth();
   const loc = useLocation();
 
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   if (!user) {
@@ -19,3 +19,5 @@ export default function RequireRole({ allowed, children }) {
 
   return <>{children}</>;
 }
+
+export default RequireRole;

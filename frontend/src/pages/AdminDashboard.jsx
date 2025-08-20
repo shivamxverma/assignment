@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useAuth } from '../auth/AuthContext';
 import { getAllBookingsForAdmin } from '../api/api';
 
 function AdminDashboard() {
-  const [bookings, setBookings] = useState([{
-    id: '',
-    user: { name: '', email: '' },
-    start: '',
-    end: ''
-  }]);
+  const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const { user } = useAuth();
+  const { user } = useAuth(); 
 
   useEffect(() => {
     if (user) {
@@ -31,12 +25,18 @@ function AdminDashboard() {
     }
   };
 
+  if (loading) {
+    return <p>Loading bookings...</p>;
+  }
+
   return (
     <div style={{ padding: '20px' }}>
       <h2>Admin Dashboard</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <h3>All Bookings</h3>
-      {loading ? <p>Loading...</p> : (
+      {bookings.length === 0 ? (
+        <p>No bookings found.</p>
+      ) : (
         <table style={{ borderCollapse: 'collapse', width: '100%' }}>
           <thead>
             <tr>
