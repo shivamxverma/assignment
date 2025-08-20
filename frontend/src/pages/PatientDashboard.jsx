@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../auth/AuthContext';
+import { getBookingsForUser , createBooking,getAvailableSlots } from '../api/api';
 
 function PatientDashboard() {
-  const [slots, setSlots] = useState([]);
-  const [bookings, setBookings] = useState([]);
+  const [slots, setSlots] = useState([
+    { id: '', start: '', end: '' }
+  ]);
+  const [bookings, setBookings] = useState([
+    { id: '', start: '', end: '' }
+  ]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { user } = useAuth();
 
   useEffect(() => {
     if (user) {
+      console.log('User:', user);
       fetchSlots();
       fetchBookings();
     }
@@ -18,8 +24,9 @@ function PatientDashboard() {
 
   const fetchSlots = async () => {
     try {
-      const res = await axios.get('/api/slots', { withCredentials: true });
-      setSlots(res.data.data);
+      const res = await getAvailableSlots();
+      console.log('Available Slots:', res.data);
+      setSlots(res.data.message);
       setLoading(false);
     } catch (err) {
       setError(err.response?.data?.error?.message || 'Error fetching slots');
@@ -29,8 +36,8 @@ function PatientDashboard() {
 
   const fetchBookings = async () => {
     try {
-      const res = await axios.get('/api/my-bookings', { withCredentials: true });
-      setBookings(res.data.data);
+      const res = await getBookingsForUser();
+      setBookings(res.data.message);
     } catch (err) {
       setError(err.response?.data?.error?.message || 'Error fetching bookings');
     }
@@ -38,7 +45,7 @@ function PatientDashboard() {
 
   const handleBook = async (slotId) => {
     try {
-      await axios.post('/api/book', { slotId }, { withCredentials: true });
+      await createBooking(slotId);
       fetchSlots();
       fetchBookings();
     } catch (err) {
@@ -65,7 +72,7 @@ function PatientDashboard() {
         {bookings.map(b => (
           <li key={b.id}>{b.start} - {b.end}</li>
         ))}
-      </ul>
+      </ul> 
     </div>
   );
 }

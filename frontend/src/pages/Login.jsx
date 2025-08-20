@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {login} from '../api/api';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -11,9 +12,13 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/login', { email, password }, { withCredentials: true });
-      localStorage.setItem('accessToken', res.data.data.token);
-      navigate(res.data.data.role === 'ADMIN' ? '/admin' : '/patient');
+      const res = await login(email, password);
+      const role = res.data.message;
+      const token = res.data.message.token;
+      
+      localStorage.setItem('accessToken', token);
+      
+      navigate( role === 'admin' ? '/admin' : '/patient');
     } catch (err) {
       setError(err.response?.data?.error?.message || 'Login failed');
     }

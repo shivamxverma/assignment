@@ -5,20 +5,15 @@ import { ApiError } from '../utils/ApiError.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 
 const availableSlots = asyncHandler(async (req, res) => {
-  let from = req.query.from ? new Date(req.query.from) : new Date();
-  let to = req.query.to ? new Date(req.query.to) : new Date(from.getTime() + 7 * 24 * 60 * 60 * 1000);
-  from.setUTCHours(0, 0, 0, 0);
-  to.setUTCHours(23, 59, 59, 999);
-  const bookedSlots = await Booking.find({}).distinct('slot');
 
-  if(bookedSlots.length === 0) {
-    return res.json(new ApiResponse(200, [], 'No slots available'));
-  }
+  console.log('Fetching available slots');
+  // const bookedSlots = await Booking.find({}).distinct('slot');
 
-  const slots = await Slot.find({
-    startAt: { $gte: from, $lte: to },
-    _id: { $nin: bookedSlots }
-  });
+  // if(bookedSlots.length === 0) {
+  //   return res.json(new ApiResponse(200, [], 'No slots available'));
+  // }
+
+  const slots = await Slot.find();
   
   res.json(new ApiResponse(200, slots.map(s => ({
     id: s._id,

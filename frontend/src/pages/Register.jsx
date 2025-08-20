@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import {register} from '../api/api'; 
 
 function Register() {
+  const [role, setRole] = useState('patient');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,7 +13,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/register', { name, email, password, role: 'USER' });
+      await register(name, email, password, role);
       navigate('/login');
     } catch (err) {
       setError(err.response?.data?.error?.message || 'Registration failed');
@@ -24,6 +25,12 @@ function Register() {
       <h2>Register</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
+        <div style={{ marginBottom: '10px' }}>
+          <select value={role} onChange={e => setRole(e.target.value)} style={{ width: '100%', padding: '8px' }}>
+            <option value="patient">patient</option>
+            <option value="admin">admin</option>
+          </select>
+        </div>
         <div style={{ marginBottom: '10px' }}>
           <input
             type="text"

@@ -7,9 +7,9 @@ import { allBookingsforPatient, allBokingforAdmin,createBooking } from '../contr
 const router = Router();
 
 router.post('/register',registerUser);
-router.post('/login',verifyJWT, loginUser);
+router.post('/login', loginUser);
 
-router.get('/slots?from=:from&to=:to',verifyJWT, availableSlots);
+router.get('/slots',verifyJWT, availableSlots);
 router.post('/book/:slotId',verifyJWT,createBooking);
 
 router.get('/my-bookings', verifyJWT,allBookingsforPatient);

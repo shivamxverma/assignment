@@ -4,7 +4,7 @@ import Login from './pages/Login.jsx';
 import SignUp from './pages/Register.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import PatientDashboard from './pages/PatientDashboard.jsx';
-import NavBar from './components/Navbar.jsx';
+import NavBar from './components/NavBar.jsx';
 import { AuthProvider } from './auth/AuthContext';
 import RequireRole from './auth/RequireRole';
 
@@ -26,7 +26,7 @@ export default function App() {
               path="/patient"
               element={
                 <ProtectedRoute>
-                  <RequireRole allowed={['USER']}>
+                  <RequireRole allowed={['patient']}>
                     <PatientDashboard />
                   </RequireRole>
                 </ProtectedRoute>
@@ -36,7 +36,7 @@ export default function App() {
               path="/admin"
               element={
                 <ProtectedRoute>
-                  <RequireRole allowed={['ADMIN']}>
+                  <RequireRole allowed={['admin']}>
                     <AdminDashboard />
                   </RequireRole>
                 </ProtectedRoute>

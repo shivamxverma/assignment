@@ -6,7 +6,7 @@ import Booking from '../models/bookings.model.js';
 import Slot from '../models/slots.model.js';
 
 const createBooking = asyncHandler(async (req, res) => {
-    const { slotId } = req.body;
+    const { slotId } = req.params;
 
     if (!slotId) {
         throw new ApiError(400, 'Missing slotId');
@@ -18,7 +18,7 @@ const createBooking = asyncHandler(async (req, res) => {
         throw new ApiError(404, 'Slot not found');
     }
 
-    const existing = await Booking.findOne({ slot: slotId });
+    const existing = await Booking.findOne({ slot: slot });
 
     if (existing) {
         throw new ApiError(409, 'Slot already booked');

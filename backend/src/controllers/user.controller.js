@@ -1,5 +1,5 @@
 import asyncHandler from '../utils/asyncHandler.js';
-import User from '../models/User.js';
+import User from '../models/user.model.js';
 import { ApiError } from '../utils/ApiError.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 import jwt from 'jsonwebtoken';
@@ -31,10 +31,13 @@ const generateAccessTokenAndRefreshToken = async (userId, role) => {
 
 const registerUser = asyncHandler(async (req, res) => {
   const { role, name, email, password } = req.body;
+
+  console.log("Registering user:", { role, name, email });
+
   if ([role, name, email, password].some(field => !field?.trim())) {
     throw new ApiError(400, "All fields are required");
   }
-  const existedUser = await User.findOne({ email: email.trim().toLowerCase() });
+  const existedUser = await User.findOne({ email: email.toLowerCase() });
   if (existedUser) {
     throw new ApiError(409, "Email already exists");
   }
@@ -47,7 +50,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
   const createdUser = await User.create({
     name,
-    email: email.trim().toLowerCase(),
+    email: email.toLowerCase(),
     password: hashedPassword,
     role: role?.toLowerCase() || 'patient',
   });

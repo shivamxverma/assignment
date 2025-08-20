@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../auth/AuthContext';
+import { getAllBookingsForAdmin } from '../api/api';
 
 function AdminDashboard() {
-  const [bookings, setBookings] = useState([]);
+  const [bookings, setBookings] = useState([{
+    id: '',
+    user: { name: '', email: '' },
+    start: '',
+    end: ''
+  }]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { user } = useAuth();
@@ -16,7 +22,7 @@ function AdminDashboard() {
 
   const fetchBookings = async () => {
     try {
-      const res = await axios.get('/api/all-bookings', { withCredentials: true });
+      const res = await getAllBookingsForAdmin();
       setBookings(res.data.data);
       setLoading(false);
     } catch (err) {

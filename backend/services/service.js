@@ -1,5 +1,8 @@
-import User from '../models/user.js';
-import Slot from '../models/slot.js';
+import User from '../src/models/user.model.js';
+import Slot from '../src/models/slots.model.js';
+import dotenv from 'dotenv';
+import bcrypt from 'bcryptjs';
+dotenv.config();
 
 async function generateSlots() {
   const today = new Date();
@@ -29,8 +32,8 @@ async function generateSlots() {
 async function seedAdmin() {
   const adminExists = await User.findOne({ email: 'admin@clinic.com' });
   if (!adminExists) {
-    const passwordHash = await bcrypt.hash('admin123', 10);
-    await new User({ name: 'Admin', email: 'admin@clinic.com', password: passwordHash, role: 'admin' }).save();
+    const hashedPassword = await bcrypt.hash(process.env.ADMIN_SEED_PASSWORD, 10);
+    await new User({ name: 'Admin', email: 'admin@clinic.com', password: hashedPassword, role: 'admin' }).save();
     console.log('Admin seeded');
   }
 }
