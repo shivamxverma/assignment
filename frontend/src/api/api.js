@@ -1,6 +1,6 @@
 import axios from "axios";
-const BASE = "https://assignment-h9fg.onrender.com/api";
-// const BASE = "http://localhost:8000/api";
+// const BASE = "https://assignment-h9fg.onrender.com/api";
+const BASE = "http://localhost:8000/api";
 
 
 export const login = (email,password) => {
@@ -38,10 +38,14 @@ export const getBookingsForUser = () => {
 }
 
 export const createBooking = (bookId) => {
-    return axios.post(`${BASE}/book/${bookId}`,{
-      withCredentials: true,
-      headers : { Authorization : `Bearer ${localStorage.getItem('accessToken')}` }
-    });
+    return axios.post(
+      `${BASE}/book/${bookId}`,
+      {},
+      {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
+      }
+    );
 }
 
 export const getAvailableSlots = () => {

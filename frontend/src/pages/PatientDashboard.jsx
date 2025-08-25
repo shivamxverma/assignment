@@ -50,20 +50,20 @@ function PatientDashboard() {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2>Patient Dashboard</h2>
+      <h2 style={{color : 'blue'}}>Patient Dashboard</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <h3>Available Slots (Next 7 Days, UTC)</h3>
+      <h3 style={{color : 'blue'}}>Available Slots (Next 7 Days, UTC)</h3>
       {loading ? (
         <p>Loading...</p>
       ) : (
         <ul>
           {slots.length === 0 ? (
-            <p>No available slots</p>
+            <li>No available slots</li>
           ) : (
             slots.map((slot) => (
-              <li key={slot.id}>
+              <li key={slot.id} style={{ marginBottom: '10px', color: slot.isBooked ? 'gray' : 'black', backgroundColor: slot.isBooked ? '#f0f0f0' : 'transparent' }}>
                 {slot.start} - {slot.end}{' '}
-                <button onClick={() => handleBook(slot.id)}>Book</button>
+                <button onClick={() => handleBook(slot.id)} style={{border : '2px', borderRadius : '20%', color : 'white', backgroundColor : 'black'}}>Book</button>
               </li>
             ))
           )}
